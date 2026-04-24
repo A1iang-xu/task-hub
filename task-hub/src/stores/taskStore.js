@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { ref, computed,watch } from "vue";
+import { useLocalStorage } from "../composables/useLocalStorage";
 export const useTaskStore = defineStore('task-store', () => {
     //1.状态(State)
     const savedTask = localStorage.getItem('my-tasks');
-    const tasks = ref(savedTask ? JSON.parse(savedTask) :[])
-    const filter = ref('all'); //当前任务过滤条件
+    const tasks = useLocalStorage('my-tasks',[]);
+    const filter = useLocalStorage('task-filter', 'all'); //当前任务过滤条件
     //2.派生状态(Getters)
         const filteredTasks = computed(() => {
     if (filter.value === 'active') return tasks.value.filter(t => !t.isCompleted);
