@@ -18,7 +18,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22 # 稳定的长期支持版本，完全兼容
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
