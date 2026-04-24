@@ -1,14 +1,16 @@
 <script setup>
 import {ref} from 'vue';
-
+import { useNotification } from '../composables/useNotification';
 //定义组件向外抛出的时间名
 const emit = defineEmits(['add-task']);
-const title = ref(''); //输入框绑定的变量  
+const title = ref(''); //输入框绑定的变量 
+const { notify } = useNotification();
 const handleSubmit = () => {
   const value = title.value.trim();
   if (value === '') return; //防止添加空任务
   emit('add-task', value); //向父组件抛出事件并传递新任务标题
   title.value = ''; //清空输入框
+  notify('Task added successfully');
 };
 </script>
 

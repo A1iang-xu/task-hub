@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { useTaskStore } from '../stores/taskStore';
 import { useRouter } from 'vue-router';
+import { useNotification } from '../composables/useNotification';
 import TaskHeader from '../components/TaskHeader.vue';
 import TaskInput from '../components/TaskInput.vue';
 import TaskFilter from '../components/TaskFilter.vue';
@@ -9,6 +10,7 @@ import TaskItem from '../components/TaskItem.vue';
 //1.初始化任务状态管理
 const taskStore = useTaskStore();
 const router = useRouter();
+const { notify } = useNotification();
 
 //2.解构出状态和方法，并使用storeToRefs包裹状态以保持响应式
 const { filter, filteredTasks } = storeToRefs(taskStore);
@@ -16,6 +18,7 @@ const {addTask, removeTask, toggleTask} = taskStore;
 
 const handleLogout = () => {
   localStorage.removeItem('isLoggedIn');
+  notify('Logged out successfully');
   router.push('/login');
 };
 </script>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import router from './router';
-
+import { useNotification } from './composables/useNotification';
+const { message, isVisible } = useNotification();
 </script>
 
 <template>
@@ -10,6 +11,9 @@ import router from './router';
         <component :is="Component" />
       </transition>
     </router-view>
+  </div>
+  <div v-if="isVisible" class="fixed top-5 left-1/2 -translate-x-1/2 bg-black/80 text-white px-5 py-2 rounded-lg shadow-lg z-9999">
+    {{ message }}
   </div>
 </template>
 

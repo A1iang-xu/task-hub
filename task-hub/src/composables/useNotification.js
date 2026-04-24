@@ -1,19 +1,16 @@
-import {ref} from 'vue';
+// src/composables/useNotification.js
+import { ref } from 'vue';
+const message = ref('');
+const isVisible = ref(false);
 
 export function useNotification() {
-    const message = ref('');
-    const isvisible = ref(false);
-    const notify = (msg,duration = 2000) => {
-        message.value = msg;
-        isvisible.value = true;
-        setTimeout(() => {
-            isvisible.value = false;
-        }, duration);
-    };
+  const notify = (msg, duration = 2000) => {
+    message.value = msg;
+    isVisible.value = true;
+    setTimeout(() => {
+      isVisible.value = false;
+    }, duration);
+  };
 
-    return {
-        message,
-        isvisible,
-        notify
-    };
+  return { message, isVisible, notify };
 }

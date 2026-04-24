@@ -1,14 +1,16 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { useNotification } from '../composables/useNotification';
 const router = useRouter();
 const isLoading = ref(false);
+const { notify } = useNotification();
 
 const handleLogin = () => {
   isLoading.value = true;
   setTimeout(() => {
     localStorage.setItem('isLoggedIn', 'true');
+    notify('Logged in successfully');
     router.push('/');
     isLoading.value = false;
   }, 1000);
