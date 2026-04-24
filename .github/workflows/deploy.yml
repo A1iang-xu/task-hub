@@ -1,25 +1,33 @@
-name: Deploy
+name: Deploy TaskHub to GitHub Pages
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      # 使用最新的 Actions 版本，兼容 Node 24
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22 # 稳定的长期支持版本，完全兼容
+          cache: 'npm'
 
-      - run: npm install
-      - run: npm run build
+      - name: Install dependencies
+        run: npm install
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
