@@ -5,6 +5,7 @@ import path from 'path'
 import viteCompression from 'vite-plugin-compression'
 
 export default defineConfig({
+  base: '/task-hub/',
   plugins: [
     vue(), 
     tailwindcss(),
