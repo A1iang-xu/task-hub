@@ -1,36 +1,17 @@
 <script setup>
-import {ref, computed} from 'vue'
+import { storeToRefs } from 'pinia';
+import { useTaskStore } from './stores/taskStore';
 import TaskHeader from './components/TaskHeader.vue';
 import TaskInput from './components/TaskInput.vue';
 import TaskFilter from './components/TaskFilter.vue';
 import TaskItem from './components/TaskItem.vue';
-//1.任务数据模型:
-const tasks = ref([
-  {id: '1', title: '体验Tailwind特性', isCompleted: false},
-  {id: '2', title: '掌握Composition API', isCompleted: true}
-]);
-const newTaskTitle = ref(''); //新任务标题输入框绑定的变量
-const filter = ref('all'); //当前任务过滤条件
-
-//2.核心方法
-const handleAddTask = (title) => {
-  tasks.value.unshift({ id: crypto.randomUUID(), title, isCompleted: false });
-};
-const handleRemoveTask = (id) => {
-  tasks.value = tasks.value.filter(t => t.id !== id);
-};
-const handleToggleTask = (id) => {
-  const task = tasks.value.find(t => t.id === id);
-  if (task) task.isCompleted = !task.isCompleted;
-};
-
-  // 3.计算属性:根据当前过滤条件返回相应的任务列表
-const filteredTasks = computed(() => {
-  if (filter.value === 'active') return tasks.value.filter(t => !t.isCompleted);
-  if (filter.value === 'completed') return tasks.value.filter(t => t.isCompleted);
-  return tasks.value;
-});
+//1.初始化任务状态管理
+const taskStore = useTaskStore();
+//2.解构出状态和方法，并使用storeToRefs包裹状态以保持响应式
+const { filter, filteredTasks } = storeToRefs(taskStore);
+const {addTask, removeTask, toggleTask} = taskStore;
 </script>
+
 
 <template>
   <div class="min-h-screen py-12 px-4">
@@ -38,7 +19,7 @@ const filteredTasks = computed(() => {
 <!-- //TaskHeader组件 -->
       <TaskHeader />
       <main class="p-6">
-        <TaskInput @add-task="handleAddTask" />
+        <TaskInput @add-task="addTask" />
         <TaskFilter v-model="filter" />
         <ul class="space-y-3">
           <TransitionGroup name="list">
@@ -46,8 +27,8 @@ const filteredTasks = computed(() => {
             v-for="task in filteredTasks" 
             :key="task.id" 
             :task="task"
-            @toggle="handleToggleTask"
-            @remove="handleRemoveTask"
+            @toggle="toggleTask"
+            @remove="removeTask"
           />
           </TransitionGroup>
         </ul>
